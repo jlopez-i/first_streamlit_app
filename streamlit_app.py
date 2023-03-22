@@ -61,14 +61,14 @@ my_cur = my_cnx.cursor()
 #my_cur.execute("SELECT CURRENT_USER(), CURRENT_ACCOUNT(), CURRENT_REGION()")
 
 my_cur.execute("select * from fruit_load_list")
-#si no se ejecuta 'banana' cambiar por select * from pc_rivery_db.public.fruit_load_list
+#If this doesn't return 'banana', try changing the select statement to: select * from pc_rivery_db.public.fruit_load_list
 
-my_data_row = my_cur.fetchone()
+my_data_rows = my_cur.fetcall()
 
 #streamlit.text("Hello from Snowflake:")
 
-streamlit.text("The fruit load list contains:")
-streamlit.text(my_data_row)
+streamlit.header("The fruit load list contains:")
+streamlit.dataframe(my_data_rows)
 
 
 
