@@ -1,8 +1,11 @@
 # Import libraries
 import streamlit
 import pandas
+import requests
+import snowflake.connector
+from urllib.error import URLError
 
-
+#---------------------STREAMLIT----------------------------------------------------------------------#
 streamlit.title('My Parents New Healthy Dinner')
 
 streamlit.header('Breakfast Menu')
@@ -13,6 +16,7 @@ streamlit.text('🥑🍞 Avocado Toast')
 
 streamlit.header('🍌🥭 Build Your Own Fruit Smoothie 🥝🍇')
 
+#---------------------------PANDAS------------------------------------------------------------------------#
 # We want pandas to read our CSV file from that S3 bucket so we use a pandas function
 #called read_csv  to pull the data into a dataframe we'll call my_fruit_list. 
 
@@ -39,7 +43,7 @@ streamlit.header("Fruityvice Fruit Advice!")
 fruit_choice = streamlit.text_input('What fruit would you like information about?','Kiwi')
 streamlit.write('The user entered ', fruit_choice)
 
-import requests
+#--------------------------------REQUESTS-----------------------------------------#
 fruityvice_response = requests.get("https://fruityvice.com/api/fruit/"+ fruit_choice)
 
 # Just writes the data to the screen in JSON
@@ -51,9 +55,16 @@ fruityvice_normalized = pandas.json_normalize(fruityvice_response.json())
 # Display it on the page as a Table
 streamlit.dataframe(fruityvice_normalized)
 
+#----------------------------------------------------------------------------------#
+
+# Add a STOP Command to Focus Our Attention
+# Do not run anything past here wile we troubleshoot
+streamlit.stop
+
+#--------------------------SNOWFLAKE_CONNECTOR-------------------------------------#
+
 # Let's Query Our Trial Account Metadata (commented)
 # Let's Query Some Data, Instead
-import snowflake.connector
 
 my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
 my_cur = my_cnx.cursor()
@@ -77,5 +88,3 @@ streamlit.write('Thanks for adding', add_my_fruit)
 
 # This will not work correctly, but just go with it for now
 my_cur.execute("insert into fruit_load_list values ('from streamlit')")
-
-
