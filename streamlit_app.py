@@ -5,7 +5,7 @@ import requests
 import snowflake.connector
 from urllib.error import URLError
 
-#---------------------STREAMLIT----------------------------------------------------------------------#
+# import streamlit
 streamlit.title('My Parents New Healthy Dinner')
 
 streamlit.header('Breakfast Menu')
@@ -16,7 +16,7 @@ streamlit.text('🥑🍞 Avocado Toast')
 
 streamlit.header('🍌🥭 Build Your Own Fruit Smoothie 🥝🍇')
 
-#---------------------------PANDAS------------------------------------------------------------------------#
+# import pandas
 # We want pandas to read our CSV file from that S3 bucket so we use a pandas function
 #called read_csv  to pull the data into a dataframe we'll call my_fruit_list. 
 
@@ -33,35 +33,28 @@ fruits_selected = streamlit.multiselect("Pick some fruits:", list(my_fruit_list.
 fruits_to_show = my_fruit_list.loc[fruits_selected]
 
 #Display it on the page by typing:
-
 streamlit.dataframe(fruits_to_show)
 
+# import requests
 # New Section to display fruityvice api response
 streamlit.header("Fruityvice Fruit Advice!")
+try:
+  fruit_choice = streamlit.text_input('What fruit would you like information about?')
+  if not fuit_choice:
+    streamlit.error("Please select a fruit to get infromation.")
+  else:
+    fruityvice_response = requests.get("https://fruityvice.com/api/fruit/"+ fruit_choice)
+    fruityvice_normalized = pandas.json_normalize(fruityvice_response.json())
+    streamlit.dataframe(fruityvice_normalized)
 
-# New Text Entry Box and Send the Input to Fruityvice as Part of the API Call
-fruit_choice = streamlit.text_input('What fruit would you like information about?','Kiwi')
-streamlit.write('The user entered ', fruit_choice)
-
-#--------------------------------REQUESTS-----------------------------------------#
-fruityvice_response = requests.get("https://fruityvice.com/api/fruit/"+ fruit_choice)
-
-# Just writes the data to the screen in JSON
-#streamlit.text(fruityvice_response.json())
-
-# Take the json version of the response and normalize it
-fruityvice_normalized = pandas.json_normalize(fruityvice_response.json())
-
-# Display it on the page as a Table
-streamlit.dataframe(fruityvice_normalized)
-
-#----------------------------------------------------------------------------------#
+except URLError as e:
+  streamlit.error()
 
 # Add a STOP Command to Focus Our Attention
 # Do not run anything past here wile we troubleshoot
 streamlit.stop()
 
-#--------------------------SNOWFLAKE_CONNECTOR-------------------------------------#
+# Import snowflake.connector
 
 # Let's Query Our Trial Account Metadata (commented)
 # Let's Query Some Data, Instead
