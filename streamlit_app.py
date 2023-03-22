@@ -62,22 +62,20 @@ streamlit.stop()
 # Import snowflake.connector
 
 # Let's Query Our Trial Account Metadata (commented)
-# Let's Query Some Data, Instead
-
-my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
-my_cur = my_cnx.cursor()
-
 #my_cur.execute("SELECT CURRENT_USER(), CURRENT_ACCOUNT(), CURRENT_REGION()")
 
-my_cur.execute("select * from fruit_load_list")
-#If this doesn't return 'banana', try changing the select statement to: select * from pc_rivery_db.public.fruit_load_list
-
-my_data_rows = my_cur.fetchall()
-
-#streamlit.text("Hello from Snowflake:")
-
 streamlit.header("The fruit load list contains:")
-streamlit.dataframe(my_data_rows)
+# Snnowflake-related functions
+def get_fruit_load_list():
+    with my_cnx.cursor() as my_cur:
+        my_cur.execute("select * from fruit_load_list")
+        return my_cur.fetchall()
+
+# Add a button to load the fruit
+if streamlit.button('Get Fruit Load List'):
+    my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
+    my_data_rows = get_fruit_load_list()
+    streamlit.dataframe(my_data_rows)
 
 # Second Text Entry Box
 # Allow to the end user to add a fruit to the list
