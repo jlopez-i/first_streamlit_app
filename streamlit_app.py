@@ -59,7 +59,7 @@ streamlit.dataframe(fruityvice_normalized)
 
 # Add a STOP Command to Focus Our Attention
 # Do not run anything past here wile we troubleshoot
-streamlit.stop
+streamlit.stop()
 
 #--------------------------SNOWFLAKE_CONNECTOR-------------------------------------#
 
