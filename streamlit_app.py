@@ -63,7 +63,7 @@ my_cur = my_cnx.cursor()
 my_cur.execute("select * from fruit_load_list")
 #If this doesn't return 'banana', try changing the select statement to: select * from pc_rivery_db.public.fruit_load_list
 
-my_data_rows = my_cur.fetcall()
+my_data_rows = my_cur.fetchall()
 
 #streamlit.text("Hello from Snowflake:")
 
